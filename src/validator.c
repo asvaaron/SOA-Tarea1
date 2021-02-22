@@ -8,15 +8,11 @@
 #include <stdlib.h>
 
 
-int all_are_numbers(char *s)
-{
-    int b = 1;
+int all_are_numbers(char *s){
     for( ; *s ; ++s)
         if(!isdigit(*s))
         {
-            b = 0;
-            return b;
+            return 0;
         }
-
-    return b;
+    return 1;
 }

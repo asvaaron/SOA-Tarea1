@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
         int cars_west = atoi(argv[1]);
         int cars_east = atoi(argv[2]);
 
-        printf("Cars West: %d, Cars East: %d \n", cars_east, cars_west);
+        printf("Cars West: %d, Cars East: %d \n", cars_west, cars_east);
 
 
         myPrintHelloMake();

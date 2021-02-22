@@ -2,7 +2,6 @@
 #include "include/hello.h"
 
 int main(int argc, char **argv) {
-    printf("You have entered %d\n", argc - 1);
 
     if ((argc - 1) != 2) {
         printf("Not enough cars both west and east \n");

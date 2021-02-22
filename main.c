@@ -5,6 +5,7 @@ int main(int argc, char **argv) {
 
     if ((argc - 1) != 2) {
         printf("Not enough cars both west and east \n");
+        return 0;
     } else {
         // Arguments starts at 1
         int cars_west = atoi(argv[1]);

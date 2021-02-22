@@ -6,7 +6,7 @@
 int main(int argc, char **argv) {
 
     if ((argc - 1) != 2) {
-        printf("Not enough cars both west and east \n");
+        printf("Not valid number of cars both west and east \n");
         return 0;
     } else {
         if(! all_are_numbers(argv[1])  || ! all_are_numbers(argv[2])){

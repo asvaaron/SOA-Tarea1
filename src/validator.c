@@ -3,7 +3,6 @@
 //
 
 #include "../include/validator.h"
-
 #include <ctype.h>
 #include <stdlib.h>
 

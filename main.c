@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
         printf("Not valid number of cars both west and east \n");
         return 0;
     } else {
-        if(! all_are_numbers(argv[1])  || ! all_are_numbers(argv[2])){
+        if(!all_are_numbers(argv[1]) || !all_are_numbers(argv[2])){
             printf("All the arguments are not integers \n");
             return 0;
         }

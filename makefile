@@ -1,16 +1,22 @@
 CC=gcc
-# Use c11 standard
-# Ignore warnings
-CFLAGS= -lpthread -std=c11 -w -I.
+
+CFLAGS= -std=c11 -w -I. -pthread
 # Add dependencies
 DEPS = hello.h validator.h car.h
 
+LDFLAGS=-pthread
+OBJECTS=main.o src/*.o
+TARGET=main
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+all: $(TARGET)
 
-mainmake: main.o
-	$(CC) -o main main.o src/validator.c src/hello.c src/car.c
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
+
+include depends
+
+depends:
+	$(CC) -MM $(OBJECTS:.o=.c) > depends
 
 clean:
-	rm *.o main
+	rm ./$(TARGET) *.o

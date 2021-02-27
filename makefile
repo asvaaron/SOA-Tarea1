@@ -20,4 +20,4 @@ depends:
 	$(CC) -MM $(OBJECTS:.o=.c) > depends
 
 clean:
-	rm ./$(TARGET) *.o
+	rm ./$(TARGET) *.o depends

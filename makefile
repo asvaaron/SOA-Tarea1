@@ -1,22 +1,17 @@
 CC=gcc
-
-# Add compiler flags
-CFLAGS= -std=c11 -w -I. -pthread
-# Add Library flags
-LDFLAGS=-pthread
-# Sources path
-DIR_SRC += ./src
-OBJECTS=main.o $(DIR_SRC)/*.o
-TARGET=main
-
-all: $(TARGET)
-
-$(TARGET): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
+# Use c11 standard
+# Ignore warnings
+CFLAGS= -std=c11 -w -I.
+LDFLAGS=-pthread -w
+# Add dependencies
+DEPS = hello.h validator.h car.h
 
 
-depends:
-	$(CC) -MM $(OBJECTS:.o=.c) > depends
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+mainmake: main.o
+	$(CC) -o main main.o src/validator.c  src/car.c $(LDFLAGS)
 
 clean:
-	rm ./$(TARGET) *.o
+	rm *.o main

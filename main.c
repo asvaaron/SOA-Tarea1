@@ -24,6 +24,15 @@ int main(int argc, char **argv) {
 
         myPrintHelloMake();
 
+        int days[] = {1,2,3,4,5};
+        int days2[] = {1,2,3,4,5};
+        int *ptr = days;
+        int size_days = sizeof(days)/sizeof(int);
+        int size_days2 = sizeof(days2)/sizeof(int);
+
+        print_roads(days, size_days, days2, size_days2);
+
+
     }
 
 

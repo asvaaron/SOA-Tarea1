@@ -1,11 +1,12 @@
 CC=gcc
 
+# Add compiler flags
 CFLAGS= -std=c11 -w -I. -pthread
-# Add dependencies
-DEPS = hello.h validator.h car.h
-
+# Add Library flags
 LDFLAGS=-pthread
-OBJECTS=main.o src/*.o
+# Sources path
+DIR_SRC += ./src
+OBJECTS=main.o $(DIR_SRC)/*.o
 TARGET=main
 
 all: $(TARGET)

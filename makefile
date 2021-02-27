@@ -14,10 +14,9 @@ all: $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
-include depends
 
 depends:
 	$(CC) -MM $(OBJECTS:.o=.c) > depends
 
 clean:
-	rm ./$(TARGET) *.o depends
+	rm ./$(TARGET) *.o

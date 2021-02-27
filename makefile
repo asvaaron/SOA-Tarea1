@@ -1,7 +1,7 @@
 CC=gcc
 # Use c11 standard
 # Ignore warnings
-CFLAGS= -std=c11 -w -I.
+CFLAGS= -lpthread -std=c11 -w -I.
 # Add dependencies
 DEPS = hello.h validator.h car.h
 

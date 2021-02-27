@@ -19,8 +19,8 @@ struct Road init(int roadSize, int bridgeSize) {
     for (int i = 0; i < roadSize; i++) {
         road.road_left[i] = -1;
         road.road_right[i] = -1;
-        rightMutex[i] = PTHREAD_MUTEX_INITIALIZER;
-        leftMutex[i] = PTHREAD_MUTEX_INITIALIZER;
+        pthread_mutex_init(&rightMutex[i], NULL);
+        pthread_mutex_init(&leftMutex[i], NULL);
     }
     return road;
 }
@@ -55,11 +55,12 @@ void rightCars(struct Road road, int count) {
 
 void *carStart(void* args) {
     struct Car car;
+    struct Road road = ((car_args_t*)args)-> road;
     car.pos = ((car_args_t*)args)->pos;
     car.car_name = ((car_args_t*)args)->id;
     car.dir = ((car_args_t*)args)->dir;
     while(car.pos >= road.left_index && car.pos < road.right_index) {
-        updateCar(((car_args_t*)args)->road, car);
+        updateCar(road, car);
     }
 }
 
@@ -105,11 +106,11 @@ int getBridgeDirection(struct Bridge bridge) {
     return bridge.count < 0 ? LEFT_DIRECTION : RIGHT_DIRECTION;
 }
 
-void addCarToBridge(struct Bridge bridge, Car car) {
+void addCarToBridge(struct Bridge bridge, struct Car car) {
     bridge.count += car.dir;
 }
 
-void removeCarFromBridge(struct Bridge bridge, Car car) {
+void removeCarFromBridge(struct Bridge bridge, struct Car car) {
     bridge.count -= car.dir;
 }
 

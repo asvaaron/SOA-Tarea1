@@ -45,8 +45,8 @@ typedef struct start_car_args {
     int dir;
 } car_args_t;
 
-pthread_mutex_t bridgeLock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t  emptyBridge = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t bridgeLock;
+pthread_cond_t  emptyBridge;
 
 pthread_mutex_t* rightMutex;
 pthread_mutex_t* leftMutex;

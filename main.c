@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include "include/hello.h"
 #include "include/validator.h"
+#include "include/car.h"
 #include <ctype.h>
+
 
 int main(int argc, char **argv) {
 
     if ((argc - 1) != 2) {
-        printf("Not valid number of cars both west and east \n");
+        printf("Not valid number of cars both left and right \n");
         return 0;
     } else {
         if(!all_are_numbers(argv[1]) || !all_are_numbers(argv[2])){
@@ -14,11 +16,11 @@ int main(int argc, char **argv) {
             return 0;
         }
         // Arguments starts at 1
-        int cars_west = atoi(argv[1]);
-        int cars_east = atoi(argv[2]);
+        int count_cars_left = atoi(argv[1]);
+        int count_cars_right = atoi(argv[2]);
 
-        printf("Cars West: %d, Cars East: %d \n", cars_west, cars_east);
 
+        printf("Cars left: %d, Cars right: %d \n", count_cars_left, count_cars_right);
 
         myPrintHelloMake();
 

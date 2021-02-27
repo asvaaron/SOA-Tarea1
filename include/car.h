@@ -17,7 +17,7 @@
 
 struct Car{
     unsigned int car_name;
-    int pos; // -1 left, 0 bridge, 1 right
+    int pos; // start row, end row
     int dir; // -1 left, 1 right
 };
 
@@ -32,11 +32,14 @@ struct Road{
     BOOL bridge; // Boolean flag
     int right_index;
     int cars_total;
-    int * road;
+    int * road_left;
+    int * road_right;
     struct Bridge * main_bridge;
 };
 
+
 void print_card(struct Car car);
 
+void print_roads(int a [], int size_a, int b [], int size_b);
 
 #endif //SOA_TAREA1_CAR_H

@@ -62,6 +62,9 @@ void *carStart(void* args) {
     while(car.pos >= road.left_index && car.pos < road.right_index) {
         updateCar(road, car);
     }
+
+    print_roads(road.road_left, road.right_index,road.road_right,road.right_index);
+
 }
 
 void updateCar(struct Road road, struct Car car) {
@@ -142,6 +145,8 @@ void updatePosition(struct Road road, struct Car car, int next_pos) {
         car.pos = next_pos;
         road.road_right[car.pos] = car.car_name;
     }
+    //Print cars
+    print_roads(road.road_left, road.right_index,road.road_right,road.right_index);
 }
 
 void print_card(struct Car car){
@@ -155,7 +160,7 @@ void print_roads(int a [], int size_a, int b [], int size_b){
 //    int size_a = sizeof(b)/sizeof(int);
     for (int i = 0; i < size_a ; i++){
         if (a[i] < 0) {
-            printf(" ");
+            printf("x");
         } else {
             printf("%d", a[i]);
         }
@@ -163,7 +168,7 @@ void print_roads(int a [], int size_a, int b [], int size_b){
     printf("\n");
     for (int i = 0; i< size_b; i++){
         if (b[i] < 0) {
-            printf(" ");
+            printf("x");
         } else {
             printf("%d", b[i]);
         }

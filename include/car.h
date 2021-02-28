@@ -38,13 +38,26 @@ struct Road{
     struct Bridge main_bridge;
 };
 
+typedef struct start_car_args {
+    struct Road road;
+    int pos;
+    int id;
+    int dir;
+} car_args_t;
+
 pthread_mutex_t bridgeLock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t  emptyBridge = PTHREAD_COND_INITIALIZER;
 
 pthread_mutex_t* rightMutex;
 pthread_mutex_t* leftMutex;
 
-void carStart(struct Road, int pos, int id, int dir);
+struct Road init(int roadSize, int bridgeSize);
+
+void leftCars(struct Road road, int count);
+
+void rightCars(struct Road road, int count);
+
+void *carStart(void*);
 
 int carNextPosition(struct Car);
 

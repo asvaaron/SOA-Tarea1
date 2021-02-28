@@ -12,10 +12,10 @@ struct Road init(int roadSize, int bridgeSize) {
     road.main_bridge.count = 0;
     road.main_bridge.right_index = roadSize/2;
     road.main_bridge.left_index = roadSize/2 + bridgeSize;
-    road.road_left = malloc((road.right_index+1) * sizeof(int));
-    road.road_right = malloc((road.right_index+1) * sizeof(int));
-    leftMutex = malloc((road.right_index+1) * sizeof(pthread_mutex_t));
-    rightMutex = malloc((road.right_index+1) * sizeof(pthread_mutex_t));
+    road.road_left = malloc(road.right_index * sizeof(int));
+    road.road_right = malloc(road.right_index * sizeof(int));
+    leftMutex = malloc(road.right_index * sizeof(pthread_mutex_t));
+    rightMutex = malloc(road.right_index * sizeof(pthread_mutex_t));
     for (int i = 0; i < road.right_index; i++) {
         road.road_left[i] = -1;
         road.road_right[i] = -1;
@@ -59,7 +59,7 @@ void *carStart(void* args) {
     car.pos = ((car_args_t*)args)->pos;
     car.car_name = ((car_args_t*)args)->id;
     car.dir = ((car_args_t*)args)->dir;
-    while(car.pos >= road -> left_index - 1 && car.pos <= road -> right_index) {
+    while(car.pos >= road -> left_index - 1 && car.pos < road -> right_index) {
         updateCar(road, &car);
         printf(" Car %d Fucking new pos: %d\n", car.car_name, car.pos);
     }

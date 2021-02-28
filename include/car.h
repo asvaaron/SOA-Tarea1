@@ -39,7 +39,7 @@ struct Road{
 };
 
 typedef struct start_car_args {
-    struct Road road;
+    struct Road* road;
     int pos;
     int id;
     int dir;
@@ -53,29 +53,29 @@ pthread_mutex_t* leftMutex;
 
 struct Road init(int roadSize, int bridgeSize);
 
-void leftCars(struct Road road, int count);
+void leftCars(struct Road* road, int count);
 
-void rightCars(struct Road road, int count);
+void rightCars(struct Road* road, int count);
 
 void *carStart(void*);
 
-int carNextPosition(struct Car);
+int carNextPosition(struct Car*);
 
-void updateCar(struct Road, struct Car);
+void updateCar(struct Road*, struct Car*);
 
-void moveOnTrack(struct Road, struct Car, int next_pos);
+void moveOnTrack(struct Road*, struct Car*, int next_pos);
 
-void moveOnBridge(struct Road, struct Car, int next_pos);
+void moveOnBridge(struct Road*, struct Car*, int next_pos);
 
 int getBridgeDirection(struct Bridge);
 
-void addCarToBridge(struct Bridge, struct Car);
+void addCarToBridge(struct Bridge*, struct Car*);
 
-void removeCarFromBridge(struct Bridge, struct Car);
+void removeCarFromBridge(struct Bridge*, struct Car*);
 
-void updatePosition(struct Road, struct Car, int next_pos);
+void updatePosition(struct Road*, struct Car*, int next_pos);
 
-void print_card(struct Car car);
+void print_card(struct Car* car);
 
 void print_roads(int a [], int size_a, int b [], int size_b);
 

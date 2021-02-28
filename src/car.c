@@ -87,11 +87,14 @@ void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
         if (pthread_mutex_lock(&bridgeLock) != 0) {
             printf("Error locking bridge");
         }
-        addCarToBridge(&(road -> main_bridge), car); //give direction to the bridge.
         moveOnTrack(road, car, next_pos);
+        addCarToBridge(&(road -> main_bridge), car); //give direction to the bridge.
     } else {
         if (car -> dir == getBridgeDirection(road -> main_bridge)) { // same direction
             moveOnTrack(road, car, next_pos);
+            if (next_pos == road -> main_bringe.left_index || next_pos == road -> main_bridge.right_index) {
+                addCarToBridge(&(road -> main_bridge), car);
+            }
             if (next_pos < road -> main_bridge.left_index || next_pos > road -> main_bridge.right_index) {
                 removeCarFromBridge(&(road -> main_bridge), car);
                 if (getBridgeDirection(road -> main_bridge) == NONE_DIRECTION) {

@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include "color.h"
 
 struct Car{
     unsigned int car_name;

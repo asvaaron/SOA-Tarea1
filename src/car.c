@@ -64,7 +64,7 @@ void *carStart(void* args) {
         printf(" Car %d Fucking new pos: %d\n", car.car_name, car.pos);
     }
 
-    print_roads(road.road_left, road.right_index,road.road_right,road.right_index);
+    print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
 
 }
 
@@ -92,7 +92,7 @@ void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
     } else {
         if (car -> dir == getBridgeDirection(road -> main_bridge)) { // same direction
             moveOnTrack(road, car, next_pos);
-            if (next_pos == road -> main_bringe.left_index || next_pos == road -> main_bridge.right_index) {
+            if (next_pos == road -> main_bridge.left_index || next_pos == road -> main_bridge.right_index) {
                 addCarToBridge(&(road -> main_bridge), car);
             }
             if (next_pos < road -> main_bridge.left_index || next_pos > road -> main_bridge.right_index) {
@@ -167,7 +167,7 @@ void updatePosition(struct Road* road, struct Car* car, int next_pos) {
         }
     }
     //Print cars
-    print_roads(road.road_left, road.right_index,road.road_right,road.right_index);
+    print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
 }
 
 void print_card(struct Car* car){
@@ -179,6 +179,7 @@ void print_card(struct Car* car){
 void print_roads(int a [], int size_a, int b [], int size_b){
 //    int size_a = sizeof(a)/sizeof(int);
 //    int size_a = sizeof(b)/sizeof(int);
+    green_print();
     for (int i = 0; i < size_a ; i++){
         if (a[i] < 0) {
             printf("x");
@@ -194,6 +195,7 @@ void print_roads(int a [], int size_a, int b [], int size_b){
             printf("%d", b[i]);
         }
     }
+    reset_color_print();
     printf("\n");
 }
 

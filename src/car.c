@@ -10,8 +10,8 @@ struct Road init(int roadSize, int bridgeSize) {
     road.left_index = 0;
     road.right_index = roadSize + bridgeSize;
     road.main_bridge.count = 0;
-    road.main_bridge.right_index = roadSize/2;
-    road.main_bridge.left_index = roadSize/2 + bridgeSize;
+    road.main_bridge.left_index = roadSize/2;
+    road.main_bridge.right_index = roadSize/2 + bridgeSize - 1; // bridge index are inclusive 
     road.road_left = malloc(road.right_index * sizeof(int));
     road.road_right = malloc(road.right_index * sizeof(int));
     leftMutex = malloc(road.right_index * sizeof(pthread_mutex_t));

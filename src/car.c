@@ -69,8 +69,10 @@ void *carStart(void* args) {
 
 void updateCar(struct Road* road, struct Car* car) {
     int next_pos = carNextPosition(car);
-
-    if (next_pos >= road -> main_bridge.left_index && next_pos <= road -> main_bridge.right_index) {
+    
+    // moveOnBridge if cars is going to enter or it is already in the bridge
+    if (next_pos == road -> main_bridge.left_index || next_pos == road -> main_bridge.right_index ||
+        (car -> pos >= road -> main_bridge.left_index && car -> pos <= road -> main_bridge.right_index)) {
         moveOnBridge(road, car, next_pos);
     } else {
         moveOnTrack(road, car, next_pos);

@@ -65,7 +65,6 @@ void *carStart(void* args) {
     }
 
     print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
-
 }
 
 void updateCar(struct Road* road, struct Car* car) {
@@ -91,17 +90,21 @@ void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
         addCarToBridge(&(road -> main_bridge), car); //give direction to the bridge.
     } else {
         if (car -> dir == getBridgeDirection(road -> main_bridge)) { // same direction
-            moveOnTrack(road, car, next_pos);
+            // Try to move the car first, before update the bridge count. 
+            // It may be blocked if there is another car in front.
+            moveOnTrack(road, car, next_pos); 
             if (next_pos == road -> main_bridge.left_index || next_pos == road -> main_bridge.right_index) {
-                addCarToBridge(&(road -> main_bridge), car);
+                addCarToBridge(&(road -> main_bridge), car); // update the bridge count once the car actualy moved.
             }
             if (next_pos < road -> main_bridge.left_index || next_pos > road -> main_bridge.right_index) {
-                removeCarFromBridge(&(road -> main_bridge), car);
-                if (getBridgeDirection(road -> main_bridge) == NONE_DIRECTION) {
+                removeCarFromBridge(&(road -> main_bridge), car); // update the bridge count once the car actualy moved.
+                if (getBridgeDirection(road -> main_bridge) == NONE_DIRECTION) { 
+                    // Bridge is empty unlock the bridge
                     pthread_mutex_unlock(&bridgeLock);
                 }
             }
         } else { // opposite direction
+            //wait until the bridge is empty and try move again.
             if (pthread_mutex_lock(&bridgeLock) != 0) {
                 printf("Error locking bridge");
             }
@@ -111,7 +114,7 @@ void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
 }
 
 int getBridgeDirection(struct Bridge bridge) {
-    return bridge.count < 0 ? LEFT_DIRECTION : RIGHT_DIRECTION;
+    return bridge.count == 0 ? NONE_DIRECTION : (bridge.count < 0 ? LEFT_DIRECTION : RIGHT_DIRECTION);
 }
 
 void addCarToBridge(struct Bridge* bridge, struct Car* car) {
@@ -129,9 +132,10 @@ void moveOnTrack(struct Road* road, struct Car* car, int next_pos) {
                 printf("Error locking L <- R position %d for car %d", next_pos, car->car_name);
             }
         }
+        int previous_pos = car -> pos; 
         updatePosition(road, car, next_pos);
-        if (car -> pos > -1 && car -> pos < road -> right_index) {
-            pthread_mutex_unlock(&leftMutex[car -> pos]);
+        if (previous_pos > -1 && previous_pos < road -> right_index) {
+            pthread_mutex_unlock(&leftMutex[previous_pos]);
         }
     } else {
         if (next_pos > -1 && next_pos < road -> right_index) {
@@ -139,9 +143,10 @@ void moveOnTrack(struct Road* road, struct Car* car, int next_pos) {
                 printf("Error locking L -> R position %d for car %d", next_pos, car->car_name);
             }
         }
+        int previous_pos = car -> pos; 
         updatePosition(road, car, next_pos);
-        if (car -> pos > -1 && car -> pos < road -> right_index) {
-            pthread_mutex_unlock(&rightMutex[car->pos]);
+        if (previous_pos > -1 && previous_pos < road -> right_index) {
+            pthread_mutex_unlock(&rightMutex[previous_pos]);
         }
     }
     //<- <- <- LEFT_DIRECTION dir = -1   start_pos = max

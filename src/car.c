@@ -61,10 +61,10 @@ void *carStart(void* args) {
     car.dir = ((car_args_t*)args)->dir;
     while(car.pos >= road -> left_index - 1 && car.pos < road -> right_index) {
         updateCar(road, &car);
-        printf(" Car %d Fucking new pos: %d\n", car.car_name, car.pos);
+        printf(" Car %d, new pos: %d\n", car.car_name, car.pos);
     }
-
     print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
+    pthread_exit(NULL);
 }
 
 void updateCar(struct Road* road, struct Car* car) {

@@ -57,7 +57,7 @@ void* leftCars(void* args) {
         car_args[i].pos = -1;
         car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &car_args[i]);
-        //sleep(randExp(((gencar_args_t*)args) -> lambda));
+        //sleep(0.1);
     }
     for (int i = count-1; i >= 0; i--) {
         pthread_join(threads[i], NULL);
@@ -75,7 +75,7 @@ void* rightCars(void* args) {
         car_args[i].pos = ((gencar_args_t*)args) -> road -> right_index;
         car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &car_args[i]);
-        //sleep(randExp(((gencar_args_t*)args) -> lambda));
+        //sleep(0.1);
     }
     for (int i = count-1; i >= 0; i--) {
         pthread_join(threads[i], NULL);
@@ -98,7 +98,6 @@ void *carStart(void* args) {
     do {
         updateCar(road, &car);
         print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
-        printf("\n");
         //printf(" Car %d, new pos: %d\n", car.car_name, car.pos);
     } while(car.pos >= road -> left_index && car.pos < road -> right_index);
 
@@ -152,6 +151,7 @@ void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
             if (pthread_mutex_lock(&bridgeLock) != 0) {
                 printf("Error locking bridge");
             }
+            printf("Try again");
             moveOnBridge(road, car, next_pos);
         }
     }
@@ -244,6 +244,7 @@ void print_roads(int a [], int size_a, int b [], int size_b){
         }
     }
     //reset_color_print();
+    printf("\n");
     printf("\n");
     pthread_mutex_unlock(&printLock);
 }

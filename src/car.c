@@ -62,7 +62,7 @@ void* leftCars(void* args) {
         car_args[i].pos = -1;
         car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &car_args[i]);
-        usleep(randExp(((gencar_args_t*)args) -> lambda)*1000000);
+        usleep(randExp(((gencar_args_t*)args) -> lambda)*30000000);
     }
     for (int i = count-1; i >= 0; i--) {
         pthread_join(threads[i], NULL);
@@ -80,7 +80,7 @@ void* rightCars(void* args) {
         car_args[i].pos = ((gencar_args_t*)args) -> road -> right_index;
         car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &car_args[i]);
-        usleep(randExp(((gencar_args_t*)args) -> lambda)*1000000);
+        usleep(randExp(((gencar_args_t*)args) -> lambda)*30000000);
     }
     for (int i = count-1; i >= 0; i--) {
         pthread_join(threads[i], NULL);

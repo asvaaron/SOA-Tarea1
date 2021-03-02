@@ -20,9 +20,7 @@ int main(int argc, char **argv) {
 
         printf("?????");
         struct Road road = init(count_cars_left + count_cars_right, 5);
-        leftCars(&road, count_cars_left);
-//        rightCars(&road, count_cars_right);
-
+        generateCars(&road, count_cars_left, count_cars_right, 3, 5);
 
         printf("Cars left: %d, Cars right: %d \n", count_cars_left, count_cars_right);
         exit(0);

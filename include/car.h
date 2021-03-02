@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <pthread.h>
+#include <unistd.h>
 //#include "color.h"
 
 struct Car{
@@ -35,8 +36,8 @@ struct Road{
     int left_index;
     int right_index;
     int cars_total;
-    int * road_left;
-    int * road_right;
+    char * road_left;
+    char * road_right;
     struct Bridge main_bridge;
 };
 
@@ -90,6 +91,6 @@ void updatePosition(struct Road*, struct Car*, int next_pos);
 
 void print_card(struct Car* car);
 
-void print_roads(int a [], int size_a, int b [], int size_b);
+void print_roads(struct Road*);
 
 #endif //SOA_TAREA1_CAR_H

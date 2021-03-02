@@ -11,10 +11,13 @@ SRC_CD=src/validator.c  src/car.c  src/color.c
 TARGET=main main.o
 
 %.o: %.c $(DEPS)
+	@echo Compiling dependencies ...
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 mainmake: main.o
+	@echo Compiling target ...
 	$(CC) -o $(TARGET) $(SRC_CD) $(LDFLAGS)
 
 clean:
+	@echo Clean compiled files ...
 	rm *.o main

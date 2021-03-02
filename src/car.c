@@ -25,32 +25,62 @@ struct Road init(int roadSize, int bridgeSize) {
     return road;
 }
 
-void leftCars(struct Road* road, int count) {
+void generateCars(Road* road, int left, int right, int leftLambda, int rightLambda) {
+    pthread_t left_thread;
+    pthread_t right_thread;
+    gencar_args_t left_cars_args;
+    gencar_args_t right_cars_args;
+    
+    left_cars_args.road = road;
+    left_cars_args.lambda = leftLambda;
+    left_cars_args.count = left;
+    
+    right_cars_args.road = road;
+    right_cars_args.lambda = rightLambda;
+    right_cars_args.count = right;
+    
+    pthread_create(&left_thread, NULL, leftCars, &left_cars_args);
+    pthread_join(left_thread, NULL);
+    pthread_create(&right_thread, NULL, rightCars, &right_cars_args);
+    pthread_join(right_thread, NULL);
+}
+
+void* leftCars(void* args) {
+    int count = ((gencar_args_t*)args) -> count;
     while (count--) {
         pthread_t thread;
         car_args_t args;
-        args.road = road;
+        args.road = ((gencar_args_t*)args) -> road;
         args.dir = RIGHT_DIRECTION;
         args.pos = -1;
         args.id = count + 1;
         pthread_create(&thread, NULL, carStart, &args);
         pthread_join(thread, NULL);
-        sleep(1);
+        sleep(randExp(((gencar_args_t*)args) -> lambda));
     }
+    pthread_exit(NULL);
 }
 
-void rightCars(struct Road* road, int count) {
+void* rightCars(void* args) {
+    int count = ((gencar_args_t*)args) -> count;
     while (count--) {
         pthread_t thread;
         car_args_t args;
-        args.road = road;
+        args.road = ((gencar_args_t*)args) -> road;
         args.dir = LEFT_DIRECTION;
-        args.pos = road -> right_index;
+        args.pos = ((gencar_args_t*)args) -> road -> right_index;
         args.id = count + 1;
         pthread_create(&thread, NULL, carStart, &args);
         pthread_join(thread, NULL);
-        sleep(1);
+        sleep(randExp(((gencar_args_t*)args) -> lambda));
     }
+    pthread_exit(NULL);
+}
+
+double randExp(double lambda) {
+    double u;
+    u = rand() / (RAND_MAX + 1.0);
+    return -log(1- u) / lambda;
 }
 
 void *carStart(void* args) {

@@ -61,13 +61,13 @@ pthread_mutex_t* leftMutex;
 
 struct Road init(int roadSize, int bridgeSize);
 
-void *generateCars(void*);
+void generateCars(Road* road, int left, int right, int leftLambda, int rightLambda);
 
-void leftCars(struct Road* road, int count);
+void* leftCars(void*);
 
-void rightCars(struct Road* road, int count);
+void* rightCars(void*);
 
-int randExp(int lambda);
+double randExp(double lambda);
 
 void *carStart(void*);
 

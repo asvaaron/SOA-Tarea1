@@ -16,6 +16,8 @@ struct Road init(int roadSize, int bridgeSize) {
     road.road_right = malloc(road.right_index * sizeof(int));
     leftMutex = malloc(road.right_index * sizeof(pthread_mutex_t));
     rightMutex = malloc(road.right_index * sizeof(pthread_mutex_t));
+    pthread_mutex_init(&bridgeLock, NULL);
+    pthread_mutex_init(&printLock, NULL);
     for (int i = 0; i < road.right_index; i++) {
         road.road_left[i] = -1;
         road.road_right[i] = -1;
@@ -95,9 +97,11 @@ void *carStart(void* args) {
     car.dir = ((car_args_t*)args)->dir;
     do {
         updateCar(road, &car);
-        printf(" Car %d, new pos: %d\n", car.car_name, car.pos);
+        print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
+        printf("\n");
+        //printf(" Car %d, new pos: %d\n", car.car_name, car.pos);
     } while(car.pos >= road -> left_index && car.pos < road -> right_index);
-    //print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
+
     pthread_exit(NULL);
 }
 
@@ -141,10 +145,8 @@ void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
                 if (getBridgeDirection(road -> main_bridge) == NONE_DIRECTION) { 
                     // Bridge is empty unlock the bridge
                     pthread_mutex_unlock(&bridgeLock);
-                    printf("bridge unlock");
                 }
             }
-            printf("Bridge count: %d", road->main_bridge.count);
         } else { // opposite direction
             //wait until the bridge is empty and try move again.
             if (pthread_mutex_lock(&bridgeLock) != 0) {
@@ -213,8 +215,6 @@ void updatePosition(struct Road* road, struct Car* car, int next_pos) {
             road->road_right[car->pos] = car->car_name;
         }
     }
-    //Print cars
-    print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
 }
 
 void print_card(struct Car* car){
@@ -224,6 +224,7 @@ void print_card(struct Car* car){
 }
 
 void print_roads(int a [], int size_a, int b [], int size_b){
+    pthread_mutex_lock(&printLock);
 //    int size_a = sizeof(a)/sizeof(int);
 //    int size_a = sizeof(b)/sizeof(int);
     //green_print();
@@ -244,6 +245,7 @@ void print_roads(int a [], int size_a, int b [], int size_b){
     }
     //reset_color_print();
     printf("\n");
+    pthread_mutex_unlock(&printLock);
 }
 
 

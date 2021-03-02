@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <pthread.h>
-#include "color.h"
+//#include "color.h"
 
 struct Car{
     unsigned int car_name;
@@ -61,7 +61,7 @@ pthread_mutex_t* leftMutex;
 
 struct Road init(int roadSize, int bridgeSize);
 
-void generateCars(Road* road, int left, int right, int leftLambda, int rightLambda);
+void generateCars(struct Road* road, int left, int right, int leftLambda, int rightLambda);
 
 void* leftCars(void*);
 

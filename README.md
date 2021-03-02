@@ -1,12 +1,12 @@
 # SOA-Tarea1
 
-## Compilar Projecto
+## Compilar Proyecto
 
 ```shell
 make
 ```
 
-## Limpiar ejectutables
+## Limpiar ejecutables
 
 ```shell
 make clean

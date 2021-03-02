@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <pthread.h>
 #include "color.h"
 
@@ -46,6 +47,12 @@ typedef struct start_car_args {
     int dir;
 } car_args_t;
 
+typedef struct generate_car_args {
+    struct Road* road;
+    int count;
+    int lambda;
+} gencar_args_t;
+
 pthread_mutex_t bridgeLock;
 pthread_cond_t  emptyBridge;
 
@@ -54,9 +61,13 @@ pthread_mutex_t* leftMutex;
 
 struct Road init(int roadSize, int bridgeSize);
 
+void *generateCars(void*);
+
 void leftCars(struct Road* road, int count);
 
 void rightCars(struct Road* road, int count);
+
+int randExp(int lambda);
 
 void *carStart(void*);
 

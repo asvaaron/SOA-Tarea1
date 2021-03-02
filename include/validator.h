@@ -1,6 +1,3 @@
-//
-// Created by aaron on 21/2/21.
-//
 
 #ifndef SOA_TAREA1_VALIDATOR_H
 #define SOA_TAREA1_VALIDATOR_H

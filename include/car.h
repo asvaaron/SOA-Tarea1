@@ -54,6 +54,7 @@ typedef struct generate_car_args {
 } gencar_args_t;
 
 pthread_mutex_t bridgeLock;
+pthread_cond_t  bridgeCond;
 pthread_mutex_t printLock;
 
 pthread_mutex_t* rightMutex;

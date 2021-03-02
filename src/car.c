@@ -17,6 +17,7 @@ struct Road init(int roadSize, int bridgeSize) {
     leftMutex = malloc(road.right_index * sizeof(pthread_mutex_t));
     rightMutex = malloc(road.right_index * sizeof(pthread_mutex_t));
     pthread_mutex_init(&bridgeLock, NULL);
+    pthread_cond_init(&bridgeCond, NULL);
     pthread_mutex_init(&printLock, NULL);
     for (int i = 0; i < road.right_index; i++) {
         road.road_left[i] = -1;
@@ -98,16 +99,14 @@ void *carStart(void* args) {
     do {
         updateCar(road, &car);
         print_roads(road->road_left, road->right_index,road->road_right,road->right_index);
-        //printf(" Car %d, new pos: %d\n", car.car_name, car.pos);
     } while(car.pos >= road -> left_index && car.pos < road -> right_index);
-
     pthread_exit(NULL);
 }
 
 void updateCar(struct Road* road, struct Car* car) {
     int next_pos = carNextPosition(car);
     
-    // moveOnBridge if cars is going to enter or it is already in the bridge
+    // moveOnBridge if car is going to enter or it is already in the bridge
     if (next_pos == road -> main_bridge.left_index || next_pos == road -> main_bridge.right_index ||
         (car -> pos >= road -> main_bridge.left_index && car -> pos <= road -> main_bridge.right_index)) {
         moveOnBridge(road, car, next_pos);
@@ -122,11 +121,17 @@ int carNextPosition(struct Car* car) {
 
 void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
     if (getBridgeDirection(road -> main_bridge) == NONE_DIRECTION) {
-        if (pthread_mutex_lock(&bridgeLock) != 0) {
-            printf("Error locking bridge");
+        pthread_mutex_lock(&bridgeLock);
+        while (getBridgeDirection(road -> main_bridge) != NONE_DIRECTION) {
+            printf("Car %d waiting to enter the bridge.\n", car -> car_name);
+            pthread_cond_wait(&bridgeCond, &bridgeLock);
+            printf("Car %d awakes and tries to enter the bridge.\n", car -> car_name);
         }
+        printf("Car %d enters the bridge.\n", car->car_name);
         moveOnTrack(road, car, next_pos);
         addCarToBridge(&(road -> main_bridge), car); //give direction to the bridge.
+        printf("Bridge locked.\n");
+        pthread_mutex_unlock(&bridgeLock);
     } else {
         if (car -> dir == getBridgeDirection(road -> main_bridge)) { // same direction
             // Try to move the car first, before update the bridge count. 
@@ -136,23 +141,32 @@ void moveOnBridge(struct Road* road, struct Car* car, int next_pos) {
             if ((car -> dir == RIGHT_DIRECTION && next_pos == road -> main_bridge.left_index) || 
                 (car -> dir == LEFT_DIRECTION && next_pos == road -> main_bridge.right_index)) {
                 addCarToBridge(&(road -> main_bridge), car); // update the bridge count once the car actualy moved.
+                printf("Car %d enters the bridge.\n", car -> car_name);
             }
             // Is the car exiting the bridge?
             if ((car -> dir == LEFT_DIRECTION && next_pos < road -> main_bridge.left_index) || 
                 (car -> dir == RIGHT_DIRECTION && next_pos > road -> main_bridge.right_index)) {
                 removeCarFromBridge(&(road -> main_bridge), car); // update the bridge count once the car actualy moved.
-                if (getBridgeDirection(road -> main_bridge) == NONE_DIRECTION) { 
+                printf("Car %d exits the bridge.\n", car -> car_name);
+                if (getBridgeDirection(road -> main_bridge) == NONE_DIRECTION) {
                     // Bridge is empty unlock the bridge
-                    pthread_mutex_unlock(&bridgeLock);
+                    pthread_cond_signal(&bridgeCond);
+                    printf("Bridge unlock.\n");
                 }
             }
         } else { // opposite direction
-            //wait until the bridge is empty and try move again.
-            if (pthread_mutex_lock(&bridgeLock) != 0) {
-                printf("Error locking bridge");
+            //wait until the bridge is empty and try to move again.
+            pthread_mutex_lock(&bridgeLock);
+            while (getBridgeDirection(road->main_bridge) != NONE_DIRECTION) {
+                printf("Car %d waiting to enter the bridge.\n", car -> car_name);
+                pthread_cond_wait(&bridgeCond, &bridgeLock);
+                printf("Car %d awakes and tries to enter the bridge.\n", car -> car_name);
             }
-            printf("Try again");
-            moveOnBridge(road, car, next_pos);
+            printf("Car %d enters the bridge.\n", car->car_name);
+            moveOnTrack(road, car, next_pos);
+            addCarToBridge(&(road -> main_bridge), car); //give direction to the bridge.
+            printf("Bridge locked.\n");
+            pthread_mutex_unlock(&bridgeLock);
         }
     }
 }

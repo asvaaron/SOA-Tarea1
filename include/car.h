@@ -60,7 +60,7 @@ pthread_mutex_t* leftMutex;
 
 struct Road init(int roadSize, int bridgeSize);
 
-void generateCars(struct Road* road, int left, int right, int leftLambda, int rightLambda);
+void generateCars(struct Road* road, int left, int right, double leftLambda, double rightLambda);
 
 void* leftCars(void*);
 

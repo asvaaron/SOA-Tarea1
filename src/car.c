@@ -20,11 +20,11 @@ struct Road init(int roadSize, int bridgeSize) {
     pthread_cond_init(&bridgeCond, NULL);
     pthread_mutex_init(&printLock, NULL);
     for (int i = 0; i < road.right_index; i++) {
-        road.road_left[i] = 'x';
-        road.road_right[i] = 'x';
+        road.road_left[i] = '_';
+        road.road_right[i] = '_';
         if (i >= road.main_bridge.left_index && i <= road.main_bridge.right_index) {
-            road.road_left[i] = 'B';
-            road.road_right[i] = 'B';
+            road.road_left[i] = '=';
+            road.road_right[i] = '=';
         }
         pthread_mutex_init(&rightMutex[i], NULL);
         pthread_mutex_init(&leftMutex[i], NULL);
@@ -32,7 +32,7 @@ struct Road init(int roadSize, int bridgeSize) {
     return road;
 }
 
-void generateCars(struct Road* road, int left, int right, int leftLambda, int rightLambda) {
+void generateCars(struct Road* road, int left, int right, double leftLambda, double rightLambda) {
     pthread_t left_thread;
     pthread_t right_thread;
     gencar_args_t left_cars_args;
@@ -62,12 +62,14 @@ void* leftCars(void* args) {
         car_args[i].pos = -1;
         car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &car_args[i]);
-        usleep(randExp(((gencar_args_t*)args) -> lambda)*30000000);
+        double exp = randExp(((gencar_args_t*)args) -> lambda);
+        //fprintf(stdout, "L %f\n", exp);
+        usleep(exp*4000000);
     }
-    for (int i = count-1; i >= 0; i--) {
+    for (int i = 0; i < count; i++) {
         pthread_join(threads[i], NULL);
     }
-    pthread_exit(NULL);
+//    pthread_exit(NULL);
 }
 
 void* rightCars(void* args) {
@@ -80,12 +82,14 @@ void* rightCars(void* args) {
         car_args[i].pos = ((gencar_args_t*)args) -> road -> right_index;
         car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &car_args[i]);
-        usleep(randExp(((gencar_args_t*)args) -> lambda)*30000000);
+        double exp = randExp(((gencar_args_t*)args) -> lambda);
+        //fprintf(stdout, "R %f\n", exp);
+        usleep(exp*4000000);
     }
-    for (int i = count-1; i >= 0; i--) {
+    for (int i = 0; i < count; i++) {
         pthread_join(threads[i], NULL);
     }
-    pthread_exit(NULL);
+//    pthread_exit(NULL);
 }
 
 double randExp(double lambda) {
@@ -102,10 +106,10 @@ void *carStart(void* args) {
     car.dir = ((car_args_t*)args)->dir;
     do {
         updateCar(road, &car);
-        usleep(1000000);
         print_roads(road);
+        usleep(1000000);
     } while(car.pos >= road -> left_index && car.pos < road -> right_index);
-    pthread_exit(NULL);
+    //pthread_exit(NULL);
 }
 
 void updateCar(struct Road* road, struct Car* car) {
@@ -221,28 +225,28 @@ void updatePosition(struct Road* road, struct Car* car, int next_pos) {
         if (car -> pos > -1 && car -> pos < road -> right_index) {
             if (car -> pos >= road -> main_bridge.left_index &&
             car -> pos <= road -> main_bridge.right_index) {
-                road -> road_left[car -> pos] = 'B';
+                road -> road_left[car -> pos] = '=';
             } else {
-                road -> road_left[car -> pos] = 'x';
+                road -> road_left[car -> pos] = '_';
             }
         }
         car -> pos = next_pos;
         if (car -> pos > -1 && car -> pos < road -> right_index) {
-            road->road_left[car->pos] = car->car_name + '0';
+            road->road_left[car->pos] = car->car_name - 1 + 'a';
         }
     } else {
         if (car -> pos > -1 && car -> pos < road -> right_index) {
             if (car -> pos >= road -> main_bridge.left_index &&
                 car -> pos <= road -> main_bridge.right_index) {
-                road->road_right[car->pos] = 'B';
+                road->road_right[car->pos] = '=';
             } else {
-                road->road_right[car->pos] = 'x';
+                road->road_right[car->pos] = '_';
             }
 
         }
         car -> pos = next_pos;
         if (car -> pos > -1 && car -> pos < road -> right_index) {
-            road->road_right[car->pos] = car->car_name + '0';
+            road->road_right[car->pos] = car->car_name - 1 + 'a';
         }
     }
 }

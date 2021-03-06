@@ -47,11 +47,9 @@ void generateCars(int left, int right, double leftLambda, double rightLambda) {
 
     pthread_create(&left_thread, NULL, leftCars, NULL);
     pthread_create(&right_thread, NULL, rightCars, NULL);
-    fprintf(stdout, "Number 1 join\n");
     if (pthread_join(right_thread, NULL) != 0) {
         fprintf(stdout, "Error join thread generating right cars.");
     }
-    fprintf(stdout, "Number 2 join\n");
     if (pthread_join(left_thread, NULL) != 0) {
         fprintf(stdout, "Error join thread generating left cars.");
     }
@@ -65,15 +63,11 @@ void* leftCars(void* args) {
         left_car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &left_car_args[i]);
         double exp = randExp(left_cars_lambda);
-        //fprintf(stdout, "L %f\n", exp);
         usleep(exp*4000000);
     }
     fprintf(stdout, "Termino generar los de la izquierda.\n");
     for (int i = left_cars_count - 1; i >= 0; i--) {
-        fprintf(stdout, "Left joining %d\n", i);
-        int c = pthread_join(threads[i], NULL);
-        if (c != 0) {
-            fprintf(stdout, "error: %d", c);
+        if (pthread_join(threads[i], NULL) != 0) {
             fprintf(stdout, "Error join left car %c.", left_cars_count - 1 + 'a');
         }
     }
@@ -88,12 +82,9 @@ void* rightCars(void* args) {
         right_car_args[i].id = i + 1;
         pthread_create(&threads[i], NULL, carStart, &right_car_args[i]);
         double exp = randExp(right_cars_lambda);
-        //fprintf(stdout, "R %f\n", exp);
         usleep(exp*4000000);
     }
-    fprintf(stdout, "Termino de generar los de la derecha.\n");
     for (int i = right_cars_count - 1; i >= 0; i--) {
-        fprintf(stdout, "Right joining %d\n", i);
         if (pthread_join(threads[i], NULL) != 0) {
             fprintf(stdout, "Error join right car %c.", right_cars_count - 1 + 'a');
         }
@@ -117,7 +108,7 @@ void *carStart(void* args) {
         print_roads();
         usleep(1000000);
     } while(car.pos <= road.right_index && car.pos >= road.left_index);
-    fprintf(stdout, "Finalizo car: %c\n", car.car_name - 1 + 'a');
+    fprintf(stdout, "Car: %c completed.\n", car.car_name - 1 + 'a');
     pthread_exit(NULL);
 }
 
@@ -141,11 +132,11 @@ void moveOnBridge(struct Car* car, int next_pos) {
     if (getBridgeDirection(road.main_bridge) == NONE_DIRECTION) {
         pthread_mutex_lock(&bridgeLock);
         while (getBridgeDirection(road.main_bridge) != NONE_DIRECTION) {
-            fprintf(stdout,"Car %d waiting to enter the bridge.\n", car -> car_name);
+            fprintf(stdout,"Car %d waiting to enter the bridge.\n", car -> car_name - 1 + 'a');
             pthread_cond_wait(&bridgeCond, &bridgeLock);
-            fprintf(stdout,"Car %d awakes and tries to enter the bridge.\n", car -> car_name);
+            fprintf(stdout,"Car %d awakes and tries to enter the bridge.\n", car -> car_name - 1 + 'a');
         }
-        fprintf(stdout,"Car %d enters the bridge.\n", car->car_name);
+        fprintf(stdout,"Car %d enters the bridge.\n", car->car_name - 1 + 'a');
         moveOnTrack(car, next_pos);
         addCarToBridge(&(road.main_bridge), car); //give direction to the bridge.
         fprintf(stdout,"Bridge locked.\n");
@@ -159,13 +150,13 @@ void moveOnBridge(struct Car* car, int next_pos) {
             if ((car -> dir == RIGHT_DIRECTION && next_pos == road.main_bridge.left_index) ||
                 (car -> dir == LEFT_DIRECTION && next_pos == road.main_bridge.right_index)) {
                 addCarToBridge(&(road.main_bridge), car); // update the bridge count once the car actualy moved.
-                fprintf(stdout,"Car %d enters the bridge.\n", car -> car_name);
+                fprintf(stdout,"Car %d enters the bridge.\n", car -> car_name - 1 + 'a');
             }
             // Is the car exiting the bridge?
             if ((car -> dir == LEFT_DIRECTION && next_pos < road.main_bridge.left_index) ||
                 (car -> dir == RIGHT_DIRECTION && next_pos > road.main_bridge.right_index)) {
                 removeCarFromBridge(&(road.main_bridge), car); // update the bridge count once the car actualy moved.
-                fprintf(stdout,"Car %d exits the bridge.\n", car -> car_name);
+                fprintf(stdout,"Car %d exits the bridge.\n", car -> car_name - 1 + 'a');
                 if (getBridgeDirection(road.main_bridge) == NONE_DIRECTION) {
                     // Bridge is empty unlock the bridge
                     pthread_cond_signal(&bridgeCond);
@@ -176,11 +167,11 @@ void moveOnBridge(struct Car* car, int next_pos) {
             //wait until the bridge is empty and try to move again.
             pthread_mutex_lock(&bridgeLock);
             while (getBridgeDirection(road.main_bridge) != NONE_DIRECTION) {
-                fprintf(stdout,"Car %d waiting to enter the bridge.\n", car -> car_name);
+                fprintf(stdout,"Car %d waiting to enter the bridge.\n", car -> car_name - 1 + 'a');
                 pthread_cond_wait(&bridgeCond, &bridgeLock);
-                fprintf(stdout,"Car %d awakes and tries to enter the bridge.\n", car -> car_name);
+                fprintf(stdout,"Car %d awakes and tries to enter the bridge.\n", car -> car_name - 1 + 'a');
             }
-            fprintf(stdout,"Car %d enters the bridge.\n", car->car_name);
+            fprintf(stdout,"Car %d enters the bridge.\n", car->car_name - 1 + 'a');
             moveOnTrack(car, next_pos);
             addCarToBridge(&(road.main_bridge), car); //give direction to the bridge.
             fprintf(stdout,"Bridge locked.\n");

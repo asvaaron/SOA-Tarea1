@@ -41,9 +41,9 @@ En este caso se utiliza la función cuantil, la cual se denota de la siguiente m
 ![eq1](https://latex.codecogs.com/svg.latex?\normalsize&space;F^{-1}(p,\lambda)=\frac{-\ln(1-p)}{\lambda})
 
 
-siendo: ![eq1](https://latex.codecogs.com/svg.latex?\normalsize&space;0<p<1 ), un número aleatorio entre cero y uno. 
-
-
+siendo: ![eq1](https://latex.codecogs.com/svg.latex?\normalsize&space;0<p<1 ), un número aleatorio entre cero y uno.
+El valor de lambda para el carril izquierdo es una costante igual a 1.002 mientras 
+que que el lambda del carril derecho es 1.005.
 
 ## Ejecutar proyecto
 

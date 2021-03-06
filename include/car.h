@@ -39,17 +39,10 @@ struct Road{
 };
 
 typedef struct start_car_args {
-    struct Road* road;
     int pos;
     int id;
     int dir;
 } car_args_t;
-
-typedef struct generate_car_args {
-    struct Road* road;
-    int count;
-    int lambda;
-} gencar_args_t;
 
 pthread_mutex_t bridgeLock;
 pthread_cond_t  bridgeCond;
@@ -58,9 +51,19 @@ pthread_mutex_t printLock;
 pthread_mutex_t* rightMutex;
 pthread_mutex_t* leftMutex;
 
-struct Road init(int roadSize, int bridgeSize);
+struct Road road;
 
-void generateCars(struct Road* road, int left, int right, double leftLambda, double rightLambda);
+double left_cars_lambda;
+int left_cars_count;
+double right_cars_lambda;
+int right_cars_count;
+
+car_args_t* left_car_args;
+car_args_t* right_car_args;
+
+void initRoad(int roadSize, int bridgeSize);
+
+void generateCars(int left, int right, double leftLambda, double rightLambda);
 
 void* leftCars(void*);
 
@@ -72,11 +75,11 @@ void *carStart(void*);
 
 int carNextPosition(struct Car*);
 
-void updateCar(struct Road*, struct Car*);
+void updateCar(struct Car*);
 
-void moveOnTrack(struct Road*, struct Car*, int next_pos);
+void moveOnTrack(struct Car*, int next_pos);
 
-void moveOnBridge(struct Road*, struct Car*, int next_pos);
+void moveOnBridge(struct Car*, int next_pos);
 
 int getBridgeDirection(struct Bridge);
 
@@ -84,10 +87,10 @@ void addCarToBridge(struct Bridge*, struct Car*);
 
 void removeCarFromBridge(struct Bridge*, struct Car*);
 
-void updatePosition(struct Road*, struct Car*, int next_pos);
+void updatePosition(struct Car*, int next_pos);
 
 void print_card(struct Car* car);
 
-void print_roads(struct Road*);
+void print_roads();
 
 #endif //SOA_TAREA1_CAR_H

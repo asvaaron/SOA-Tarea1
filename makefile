@@ -13,11 +13,11 @@ TARGET=main main.o
 
 %.o: %.c $(DEPS)
 	@echo Compiling dependencies ...
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -g -c -o $@ $< $(CFLAGS)
 
 mainmake: main.o
 	@echo Compiling target ...
-	$(CC) -o $(TARGET) $(SRC_CD) $(LDFLAGS)
+	$(CC) -g -o $(TARGET) $(SRC_CD) $(LDFLAGS)
 
 clean:
 	@echo Clean compiled files ...

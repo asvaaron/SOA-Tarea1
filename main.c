@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
         int count_cars_left = atoi(argv[1]);
         int count_cars_right = atoi(argv[2]);
 
-        struct Road road = init(30, 10);
-        generateCars(&road, count_cars_left, count_cars_right, 1.002, 1.005);
+        initRoad(30, 10);
+        generateCars(count_cars_left, count_cars_right, 1.002, 1.005);
 
         //printf("Cars left: %d, Cars right: %d \n", count_cars_left, count_cars_right);
         exit(0);

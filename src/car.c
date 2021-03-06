@@ -93,9 +93,9 @@ void* rightCars(void* args) {
 }
 
 double randExp(double lambda) {
-    double u;
-    u = rand() / (RAND_MAX + 1.0);
-    return (-log(1.0- u) / lambda);
+    double p;
+    p = rand() / (RAND_MAX + 1.0);
+    return (-log(1.0- p) / lambda);
 }
 
 void *carStart(void* args) {

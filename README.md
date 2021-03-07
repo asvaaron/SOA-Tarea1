@@ -1,7 +1,9 @@
 # SOA-Tarea1
 
+Integrantes:
 
-
+* Geykel Hodgson Chavarria
+* Aaron Sibaja Villalobos
 
 ## Compilar Proyecto
 
@@ -14,6 +16,20 @@ make
 ```shell
 make clean
 ```
+
+## Ejecutar 
+
+El número de carros debe de ser pasado utilizando dos parámetros enteros.
+El primer argumento corresponde a la cantidad de carros del carril oeste (izquierdo)
+mientras que el segundo es la cantidad de carros en el carril este (derecho).
+Para el siguiente ejemplo se utilizan dos carros en el carril oeste y tres
+carros en el carril este.
+
+
+```shell
+./main 2 3
+```
+
 
 
 ### Distribución Probabilística
@@ -42,20 +58,10 @@ En este caso se utiliza la función cuantil, la cual se denota de la siguiente m
 
 
 siendo: ![eq1](https://latex.codecogs.com/svg.latex?\normalsize&space;0<p<1 ), un número aleatorio entre cero y uno.
+
+
 El valor de lambda para el carril izquierdo es una costante igual a 1.002 mientras 
 que que el lambda del carril derecho es 1.005.
 
-## Ejecutar proyecto
-
-El número de carros debe de ser pasado utilizando dos parámetros enteros.
-El primer argumento corresponde a la cantidad de carros del carril oeste (izquierdo)
-mientras que el segundo es la cantidad de carros en el carril este (derecho).
-Para el siguiente ejemplo se utilizan dos carros en el carril oeste y tres
-carros en el carril este.
-
-
-```shell
-./main 2 3
-```
 
 
